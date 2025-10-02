@@ -226,3 +226,14 @@ This project is designed for junior developers to practice and learn. Feel free 
 
 ---
 
+## 📋 AI Assistant Guidelines
+
+**Important**: If you're using an AI coding assistant (Claude, Copilot, Cursor, etc.), please review the `CLAUDE.md` file in the root directory. It contains:
+- Essential architectural patterns and design decisions
+- Important development rules and constraints
+- Guidelines for working with this codebase
+
+Make sure to check the **Rules for AI Assistants** section at the bottom of CLAUDE.md for critical guidelines about git operations and database migrations.
+
+---
+
