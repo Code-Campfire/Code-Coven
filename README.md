@@ -1,16 +1,18 @@
 # Code Coven - Project Setup Guide
 
-A full-stack web application built with React Native/Expo (frontend) and FastAPI (backend), designed for junior developers to learn and grow. IF YOU ARE LOST ON SET UP, YOU SHOULD TALK WITH YOUR AI CODING ASSISTANT ABOUT THE APP AND WHAT IS REQUIRED TO SET UP. ASK IT QUESTIONS ABOUT HOW AND WHY YOU SHOULD FOLLOW X PROCESS. 
+A full-stack web application built with React Native/Expo (frontend) and FastAPI (backend), designed for junior developers to learn and grow. IF YOU ARE LOST ON SET UP, YOU SHOULD TALK WITH YOUR AI CODING ASSISTANT ABOUT THE APP AND WHAT IS REQUIRED TO SET UP. ASK IT QUESTIONS ABOUT HOW AND WHY YOU SHOULD FOLLOW X PROCESS.
 
 ## 🚀 Prerequisites
 
 Before you begin, ensure you have the following installed:
+
 - **Docker Desktop** (v20.10 or higher)
   - If your computer is outdated (intel mac usually) and cannot install docker desktop, reach out to your team leads ASAP.
 - **Docker Compose** (v2.0 or higher)
 - **Git**
 
 Optional for local development:
+
 - Node.js (v20 or higher)
 - Python (v3.12 or higher)
 
@@ -19,6 +21,7 @@ Optional for local development:
 ### 1. Clone the Repository
 
 #### Using SSH (Recommended)
+
 ```bash
 git clone git@github.com:Code-Campfire/Code-Coven.git
 cd Code-Coven
@@ -27,7 +30,8 @@ cd Code-Coven
 ### 2. Start All Services with Docker
 
 #### First Time Setup
-```bash
+
+````bash
 # Build and start all containers
 docker-compose up --build
 
@@ -40,10 +44,12 @@ docker-compose up
 
 # Or in detached mode
 docker-compose up -d
-```
+````
 
 ### 3. Verify Everything is Working
+
 Open your browser and navigate to:
+
 - **Frontend**: http://localhost:3000
   - You should see "Hello World"
   - Below it: "You are connected to the backend!" (in green)
@@ -51,17 +57,18 @@ Open your browser and navigate to:
 
 ## 🛠 Service URLs & Ports
 
-| Service | URL/Port | Description |
-|---------|----------|-------------|
-| Frontend | http://localhost:3000 | React Native/Expo web app |
-| Backend API | http://localhost:8000 | FastAPI REST API |
+| Service           | URL/Port                   | Description                    |
+| ----------------- | -------------------------- | ------------------------------ |
+| Frontend          | http://localhost:3000      | React Native/Expo web app      |
+| Backend API       | http://localhost:8000      | FastAPI REST API               |
 | API Documentation | http://localhost:8000/docs | Interactive API docs (Swagger) |
-| PostgreSQL | localhost:5432 | Database |
-| Redis | localhost:6379 | Cache server |
+| PostgreSQL        | localhost:5432             | Database                       |
+| Redis             | localhost:6379             | Cache server                   |
 
 ## 🗄 Database Connection
 
 Use these credentials to connect to PostgreSQL:
+
 - **Host**: localhost
 - **Port**: 5432
 - **Database**: app_db
@@ -69,6 +76,7 @@ Use these credentials to connect to PostgreSQL:
 - **Password**: app_password
 
 Example connection string:
+
 ```
 postgresql://app_user:app_password@localhost:5432/app_db
 ```
@@ -76,6 +84,7 @@ postgresql://app_user:app_password@localhost:5432/app_db
 ## 💻 Development Commands
 
 ### Docker Commands
+
 ```bash
 # View running containers
 docker ps
@@ -102,6 +111,7 @@ docker exec -it code-coven-frontend-1 sh
 ### Local Development (Without Docker)
 
 #### Backend
+
 ```bash
 cd backend
 python -m venv venv
@@ -111,6 +121,7 @@ uvicorn main:app --reload --port 8000
 ```
 
 #### Frontend
+
 ```bash
 cd frontend
 npm install
@@ -118,6 +129,7 @@ npm run web
 ```
 
 ## 📁 Project Structure
+
 ```
 code-coven/
 ├── backend/           # FastAPI backend
@@ -139,6 +151,7 @@ code-coven/
 ## 🔧 Troubleshooting
 
 ### Containers won't start
+
 ```bash
 # Check if ports are already in use
 lsof -i :3000  # Frontend port
@@ -150,6 +163,7 @@ kill -9 $(lsof -t -i:3000)
 ```
 
 ### Clean restart
+
 ```bash
 # Stop everything and remove volumes
 docker-compose down -v
@@ -162,6 +176,7 @@ docker-compose up --build
 ```
 
 ### View logs for debugging
+
 ```bash
 # All services
 docker-compose logs
@@ -177,10 +192,13 @@ docker-compose logs -f
 ## 🧪 Testing the Setup
 
 1. **Backend Health Check**:
+
    ```bash
    curl http://localhost:8000/api/health
    ```
+
    Expected response:
+
    ```json
    {
      "status": "connected",
@@ -212,6 +230,7 @@ docker-compose logs -f
 ## 🤝 Contributing
 
 This project is designed for junior developers to practice and learn. Feel free to:
+
 - Add new features
 - Improve existing code
 - Fix bugs
@@ -229,6 +248,7 @@ This project is designed for junior developers to practice and learn. Feel free 
 ## 📋 AI Assistant Guidelines
 
 **Important**: If you're using an AI coding assistant (Claude, Copilot, Cursor, etc.), please review the `CLAUDE.md` file in the root directory. It contains:
+
 - Essential architectural patterns and design decisions
 - Important development rules and constraints
 - Guidelines for working with this codebase
@@ -236,4 +256,3 @@ This project is designed for junior developers to practice and learn. Feel free 
 Make sure to check the **Rules for AI Assistants** section at the bottom of CLAUDE.md for critical guidelines about git operations and database migrations.
 
 ---
-

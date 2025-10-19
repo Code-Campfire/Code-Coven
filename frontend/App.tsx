@@ -1,39 +1,61 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Login from './screens/Login';
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8000';
+function AppContent() {
+  const { user, loading, logout } = useAuth();
 
-export default function App() {
-  const [connectionStatus, setConnectionStatus] = useState<string>('');
-  const [isConnected, setIsConnected] = useState<boolean>(false);
+  if (loading) {
+    // Spinner while checking auth state
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#007AFF" />
+        <StatusBar style="auto" />
+      </View>
+    );
+  }
 
-  useEffect(() => {
-    checkBackendConnection();
-  }, []);
-
-  const checkBackendConnection = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/api/health`);
-      if (response.data.status === 'connected') {
-        setConnectionStatus('You are connected to the backend!');
-        setIsConnected(true);
-      }
-    } catch (error) {
-      setConnectionStatus('Unable to connect to backend');
-      setIsConnected(false);
-    }
-  };
+  if (!user) {
+    return (
+      // runs when no user is signed in
+      <>
+        <Login
+          onLoginSuccess={() => {
+            // This will be handled by Firebase auth state change
+            console.log('Login successful');
+          }}
+        />
+        <StatusBar style="auto" />
+      </>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hello World</Text>
-      <Text style={[styles.status, isConnected ? styles.connected : styles.disconnected]}>
-        {connectionStatus}
-      </Text>
+      <Text style={styles.title}>Welcome!</Text>
+      <Text style={styles.successText}>You are logged in</Text>
+
+      <TouchableOpacity style={styles.button} onPress={logout}>
+        <Text style={styles.buttonText}>Logout</Text>
+      </TouchableOpacity>
+
       <StatusBar style="auto" />
     </View>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
@@ -43,20 +65,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 20,
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 10,
   },
-  status: {
+  successText: {
+    color: 'green',
     fontSize: 18,
     marginTop: 10,
+    marginBottom: 20,
   },
-  connected: {
-    color: 'green',
+  button: {
+    width: '100%',
+    maxWidth: 400,
+    height: 50,
+    backgroundColor: '#007AFF',
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
   },
-  disconnected: {
-    color: 'red',
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
