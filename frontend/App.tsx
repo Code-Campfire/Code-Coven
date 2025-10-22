@@ -2,15 +2,28 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { auth } from './firebase';
+import SignUpScreen from './screens/SignUpScreen';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8000';
 
 export default function App() {
   const [connectionStatus, setConnectionStatus] = useState<string>('');
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     checkBackendConnection();
+
+    // Listen for authentication state changes
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const checkBackendConnection = async () => {
@@ -26,9 +39,28 @@ export default function App() {
     }
   };
 
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  // Show sign-up screen if user is not authenticated
+  if (!user) {
+    return (
+      <>
+        <SignUpScreen onSignUpSuccess={() => {}} />
+        <StatusBar style="auto" />
+      </>
+    );
+  }
+
+  // Show main app content if user is authenticated
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hello World</Text>
+      <Text style={styles.title}>Hello, {user.email}!</Text>
       <Text style={[styles.status, isConnected ? styles.connected : styles.disconnected]}>
         {connectionStatus}
       </Text>
