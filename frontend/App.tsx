@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import Login from './screens/Login';
+import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
+import Login from './screens/Login.tsx';
 
 function AppContent() {
   const { user, loading, logout } = useAuth();
