@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../firebase';
 
 interface LoginProps {
@@ -51,6 +51,43 @@ export default function Login({ onLoginSuccess }: LoginProps) {
     }
   };
 
+  const handleForgotPassword = async () => {
+    // Clear previous errors
+    setError('');
+
+    // Check if email is provided
+    if (!email) {
+      setError('Please enter your email address first');
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Send password reset email via Firebase
+      await sendPasswordResetEmail(auth, email);
+
+      // Success - show confirmation (using alert for now, could be improved with a modal)
+      alert('Password reset email sent! Please check your inbox.');
+    } catch (err: any) {
+      // Handle Firebase errors
+      if (err.code === 'auth/user-not-found') {
+        setError('No account found with this email address');
+      } else {
+        setError(err.message || 'Failed to send reset email. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MusicMuse</Text>
@@ -87,6 +124,14 @@ export default function Login({ onLoginSuccess }: LoginProps) {
         ) : (
           <Text style={styles.buttonText}>Login</Text>
         )}
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.forgotPasswordLink}
+        onPress={handleForgotPassword}
+        disabled={loading}
+      >
+        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
       </TouchableOpacity>
     </View>
   );
@@ -143,5 +188,14 @@ const styles = StyleSheet.create({
     color: 'red',
     marginBottom: 10,
     textAlign: 'center',
+  },
+  forgotPasswordLink: {
+    marginTop: 15,
+    padding: 10,
+  },
+  forgotPasswordText: {
+    color: '#007AFF',
+    fontSize: 16,
+    textDecorationLine: 'underline',
   },
 });
