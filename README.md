@@ -73,6 +73,47 @@ Example connection string:
 postgresql://app_user:app_password@localhost:5432/app_db
 ```
 
+### Database Migrations (Alembic)
+
+This project uses Alembic for database schema management.
+
+**Running migrations (first time and after pulling new code):**
+```bash
+# Apply all pending migrations to database
+docker-compose exec backend alembic upgrade head
+
+# Check current migration version
+docker-compose exec backend alembic current
+
+# View migration history
+docker-compose exec backend alembic history
+```
+
+**Creating new migrations (when you change the schema):**
+```bash
+# Create a new migration file
+docker-compose exec backend alembic revision -m "description of changes"
+
+# Edit the generated file in backend/migrations/versions/
+# Then run: docker-compose exec backend alembic upgrade head
+```
+
+**Rolling back migrations:**
+```bash
+# Rollback one migration
+docker-compose exec backend alembic downgrade -1
+
+# Rollback all migrations
+docker-compose exec backend alembic downgrade base
+```
+
+**For teammates:**
+When you pull code that includes new migration files:
+```bash
+# Just run this to sync your database
+docker-compose exec backend alembic upgrade head
+```
+
 ## 💻 Development Commands
 
 ### Docker Commands

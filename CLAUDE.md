@@ -61,6 +61,49 @@ curl http://localhost:8000/api/health
 # {"status":"connected","message":"Backend is operational","service":"FastAPI Backend"}
 ```
 
+### Database Migrations (Alembic)
+
+**First-time setup (already done):**
+- Alembic is initialized in `backend/migrations/`
+- Migration files are in `backend/migrations/versions/`
+
+**Running migrations:**
+```bash
+# Apply all pending migrations to database
+docker-compose exec backend alembic upgrade head
+
+# Check current migration version
+docker-compose exec backend alembic current
+
+# View migration history
+docker-compose exec backend alembic history
+```
+
+**Creating new migrations (when you change the schema):**
+```bash
+# Create a new migration file
+docker-compose exec backend alembic revision -m "description of changes"
+
+# Edit the generated file in backend/migrations/versions/
+# Then run: alembic upgrade head
+```
+
+**Rolling back migrations:**
+```bash
+# Rollback one migration
+docker-compose exec backend alembic downgrade -1
+
+# Rollback all migrations
+docker-compose exec backend alembic downgrade base
+```
+
+**For teammates:**
+When you pull code that includes new migration files:
+```bash
+# Just run this to sync your database
+docker-compose exec backend alembic upgrade head
+```
+
 ## Architecture & Key Design Patterns
 
 ### Service Communication
