@@ -26,6 +26,7 @@ pip-delete-this-directory.txt
 .env.test.local
 .env.production.local
 *.env
+backend/.env
 
 # IDE
 .vscode/
