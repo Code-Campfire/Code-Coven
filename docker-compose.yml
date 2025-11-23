@@ -35,7 +35,7 @@ services:
   postgres:
     image: postgres:17-alpine
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       - POSTGRES_USER=app_user
       - POSTGRES_PASSWORD=app_password
