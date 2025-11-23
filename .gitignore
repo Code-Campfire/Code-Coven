@@ -117,6 +117,7 @@ firebase-debug.log
 .firebase/
 serviceAccountKey.json
 firebase-admin-sdk.json
+firebase-service-account.json
 
 # Jupyter Notebooks
 .ipynb_checkpoints/
